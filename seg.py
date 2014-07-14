@@ -11,6 +11,8 @@ class City():
 		self.width = width
 		self.height = height
 		self.generate(width,height, density)
+		self.initial = list([[citizen for citizen in row] for row in self.housing])
+		
 
 	# Generates a grid with a set width, height and density of people. Future iterations should include a psuedo-random version.
 	def generate(self, width, height, density):
@@ -22,9 +24,11 @@ class City():
 		return True
 
 	# Crude way to print
-	def printMap(self):
-		os.system('clear')
-		for row in self.housing:
+	def printMap(self, map_to_print, clear):
+		if clear:
+			os.system('clear')
+
+		for row in map_to_print:
 			line = str()
 			for citizen in row:
 				if citizen == None:
@@ -37,12 +41,24 @@ class City():
 	# Main method in City, taes care of updating the happiness of each Person and moving them if neccessary
 	def Update(self):
 		housing = list(self.housing)
+		equilibrium = False
 		for row in housing:
 			for citizen in row:
 				if citizen != None: #Check there is a citizen at this grid point
 					citizen.calcHappiness(self.nearbyHouses(citizen))
 					if citizen.getHappiness() < 0: 
 						self.movePerson(citizen)
+						equilibrium = True
+		return equilibrium
+
+	def run(self, increment):
+		while self.Update():
+			self.printMap(self.housing, True)
+			time.sleep(increment)
+
+		print "\nVs. Initial map: "
+		self.printMap(self.initial, False)
+		return True
 
 	def nearbyHouses(self, citizen):
 		x,y = citizen.getLocation()
@@ -121,10 +137,7 @@ class Person():
 				print "WTF?"
 		return True
 
-c = City(10,10, 0.5)
-for i in range(1000):
-	c.Update()
-	c.printMap()
-	print "Iteration " + str(i)
-	time.sleep(0.2)
+c = City(25,25, 0.6)
+c.run(0.2)
+
 
