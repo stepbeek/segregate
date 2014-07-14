@@ -4,10 +4,10 @@ import random
 
 # A City class, built like a grid to contain numerous Person objects
 class City():
-	def __init__(self, width, height, density):
+	def __init__(self, width, height, density, numRaces):
 		self.housing = []
 		self.free_houses = []
-		self.number_races = 3
+		self.number_races = numRaces
 		self.width = width
 		self.height = height
 		self.generate(width,height, density)
@@ -32,7 +32,7 @@ class City():
 			line = str()
 			for citizen in row:
 				if citizen == None:
-					line += "+ "
+					line += "+ " # Free houses are printed as a +
 				else:
 					line += str(citizen.getRace()) + " "
 			print line
@@ -126,18 +126,23 @@ class Person():
 		self.happiness = 0
 		for house in otherHouses:
 			if house == None:
-				self.happiness -= 0.5
-			elif house.race < self.race:
-				self.happiness -= 1
-			elif house.race == self.race:
-				self.happiness += 1
-			elif house.race > self.race:
-				self.happiness += 0.5
+				self.happiness -= 0.75
 			else:
-				print "WTF?"
+				otherRace = house.getRace()
+				if otherRace < self.race:
+					self.happiness -= 1
+				elif otherRace == self.race:
+					self.happiness += 1
+				elif otherRace == self.race +1:
+					self.happiness += 0.5
+				else:
+					self.happiness -= int((otherRace-self.race)/2 + 1)
 		return True
 
-c = City(25,25, 0.6)
+
+# Defines a City with width, height, density (of filled housing) and number of races
+c = City(25,25, 0.8, 4)
+#runs the city simulation with time increments of 0.2s
 c.run(0.2)
 
 
