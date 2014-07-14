@@ -52,12 +52,15 @@ class City():
 		return equilibrium
 
 	def run(self, increment):
+		changeCount = 0
 		while self.Update():
+			changeCount += 1
 			self.printMap(self.housing, True)
 			time.sleep(increment)
 
 		print "\nVs. Initial map: "
 		self.printMap(self.initial, False)
+		print "\n\n It took " + str(changeCount) + " changes for equilibrium to be reached."
 		return True
 
 	def nearbyHouses(self, citizen):
@@ -143,6 +146,6 @@ class Person():
 # Defines a City with width, height, density (of filled housing) and number of races
 c = City(25,25, 0.8, 4)
 #runs the city simulation with time increments of 0.2s
-c.run(0.2)
+c.run(0)
 
 
