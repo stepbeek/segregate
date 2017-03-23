@@ -26,8 +26,8 @@ class City():
 	# Crude way to print
 	def printMap(self, map_to_print, clear):
 		if clear:
-			os.system('clear')
-
+			print(chr(27) + "[2J")
+		
 		for row in map_to_print:
 			line = str()
 			for citizen in row:
@@ -144,8 +144,6 @@ class Person():
 
 
 # Defines a City with width, height, density (of filled housing) and number of races
-c = City(25,25, 0.8, 4)
-#runs the city simulation with time increments of 0.2s
-c.run(0)
-
-
+c = City(10, 10, 0.8, 4)
+#runs the city simulation with time increments in seconds
+c.run(1)
